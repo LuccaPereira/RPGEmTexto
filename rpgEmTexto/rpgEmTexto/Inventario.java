@@ -49,16 +49,14 @@ public abstract class Inventario implements Cloneable{
     }
 
     public void listarInventario(){
-        Item itemInventA;
-        Item itemInventB;
 
        if (this.inventario == null || this.inventario.isEmpty()) {
             System.out.println("--- Inventário Vazio ---");
             return;
         }
-
-        this.inventario.sort((itemInventA, itemInventB) -> 
-            itemInventA.getNome().compareTo(itemInventB.getNome())
+        
+        this.inventario.sort((a, b) -> 
+            a.getNome().compareTo(b.getNome())
         );
 
         System.out.println("--- Inventário (Ordenado por Nome) ---");

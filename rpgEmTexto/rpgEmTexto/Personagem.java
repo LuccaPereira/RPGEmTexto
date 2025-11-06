@@ -78,6 +78,9 @@ public class Personagem {
         //fazer ainda
     }
 
+    public int tomarDano(int dano, Personagem atacante){
+        return atacante.getPontosVida() - dano;
+    }
 
 }
 
