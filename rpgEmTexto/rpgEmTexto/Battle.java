@@ -1,4 +1,5 @@
 package rpgEmTexto;
+
 import java.util.Random; 
 
 public class Battle {
@@ -9,7 +10,6 @@ public class Battle {
         this.input = input;
         this.dado = dado;
     }
-
 
     public void iniciar(Personagem jogador, Personagem inimigo) {
 
@@ -24,11 +24,23 @@ public class Battle {
 
             switch (escolha) {
                 case 1:
-                    executarTurnoAtaque(jogador, inimigo);
-                    break;
+                    if (jogador instanceof Mago) {
+                        
+                        ((Mago) jogador).lancarBolaDeFogo(inimigo);
+                    
+                    } else {
+                        System.out.println(jogador.getNome() + " usa um ataque básico!");
+                        executarTurnoAtaque(jogador, inimigo);
+                    }
+                    break; 
+
                 case 2:
-                    System.out.println("Usar item (ainda não implementado)");
-                    break;
+                    System.out.println("Qual item você quer usar? (Digite o nome exato)");
+                    String nomeDoItem = this.input.obterTexto();
+                                   
+                    jogador.usarItem(nomeDoItem);
+                    break; 
+
                 case 3:
                     jogadorFugiu = tentarFugir(jogador);
                     break;
@@ -38,7 +50,7 @@ public class Battle {
                 break; 
             }
             if (inimigo.getPontosVida() <= 0) {
-                System.out.println("O " + inimigo.getNome() + " foi derrotado!");            
+                System.out.println("O " + inimigo.getNome() + " foi derrotado!");
                 break;
             }
 
@@ -56,6 +68,7 @@ public class Battle {
 
     private void executarTurnoAtaque(Personagem atacante, Personagem defensor) {
         System.out.println("---------- Turno de " + atacante.getNome() + " ----------");
+        
         int rolagem = this.dado.nextInt(10) + 1; 
         System.out.println(atacante.getNome() + " rolou o dado: " + rolagem);
 
@@ -72,7 +85,7 @@ public class Battle {
     }
 
     private boolean tentarFugir(Personagem jogador) {
-        System.out.println(jogador.getNome() + " tenta fugir!");       
+        System.out.println(jogador.getNome() + " tenta fugir!");
         int rolagem = this.dado.nextInt(100); 
         
         if (rolagem >= 50) {
@@ -104,5 +117,4 @@ public class Battle {
     private boolean ambosEstaoVivos(Personagem p1, Personagem p2) {
         return p1.getPontosVida() > 0 && p2.getPontosVida() > 0;
     }
-
 }

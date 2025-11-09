@@ -23,12 +23,11 @@ public abstract class Inventario implements Cloneable{
         }
     }
 
-    public void removerItem(Item itemUsado){
+    public void removerItem(String itemUsado){
         boolean itemFoiEncontrado = false;
         for(Item itens : inventario){
             Item itemInventario = itens;
-            String itemNome = itemUsado.getNome();
-            if(itemNome.equals(itemInventario.getNome())){
+            if(itemUsado.equals(itemInventario.getNome())){
                 int quantidade = itemInventario.getQuantidade();
                 if(quantidade > 0){
                     System.out.println("Item Utilizado");
@@ -63,5 +62,35 @@ public abstract class Inventario implements Cloneable{
         for (Item item : this.inventario) {
             System.out.println(item); 
         }
+    }
+
+    
+    public Item encontrarItemPorNome(String itemUsado){
+        InputHelper input = new InputHelper();
+        boolean itemFoiEncontrado = false;
+        if(this.inventario == null){
+            System.out.println("Inventario Vazio! ");
+        }
+
+        for(Item itens : inventario){
+            Item itemInventario = itens;
+            String itemNome = itemUsado;
+            if(itemInventario.getNome().equals(itemNome)){
+                itemFoiEncontrado = true;
+                return itemInventario;
+            }
+        }
+
+        if(itemFoiEncontrado = false){
+            System.out.println("Você não possui esse item no inventario, deseja ver seu inventario? ");
+            String texto = input.obterTexto();
+            if(texto == "sim"){
+                listarInventario();
+            } else {
+                return null;
+            }
+
+        }
+        return null;  
     }
 }
