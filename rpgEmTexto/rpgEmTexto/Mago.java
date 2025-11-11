@@ -4,19 +4,16 @@ public class Mago extends Personagem {
     private int mana;
     private int abilityPower;
 
-    public Mago (String nome, int pontosVida, int ataque, int defesa, short nivel, Inventario inventario, int mana, int abilityPower){
-        super(nome, pontosVida, ataque, defesa, nivel, inventario);
-        //adicionar mana
+    public Mago (String nome, int pontosVida, int ataque, int defesa, short nivel, Inventario inventario, int pontosVidaMaximo, int mana, int abilityPower){
+        super(nome, pontosVida, ataque, defesa, nivel, inventario, pontosVidaMaximo);
         this.mana = mana;
         this.abilityPower = abilityPower;
         
     }
 
     public void lancarBolaDeFogo(Personagem alvo) {
-        InputHelper input = new InputHelper();
         int custoMana = 5; 
         int danoBase = 10;
-        String pocao = "Poção";
 
         if (this.getMana() >= custoMana) {
             
@@ -26,7 +23,7 @@ public class Mago extends Personagem {
             int danoDeFogo = this.getAtaque() + danoBase; 
             System.out.println(this.getNome() + " lança uma BOLA DE FOGO!");
 
-            alvo.tomarDano(danoDeFogo, this);
+            this.tomarDano(danoDeFogo, alvo);
 
         } 
         else {

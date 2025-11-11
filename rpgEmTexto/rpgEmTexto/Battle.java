@@ -28,7 +28,14 @@ public class Battle {
                         
                         ((Mago) jogador).lancarBolaDeFogo(inimigo);
                     
-                    } else {
+                    } else if (jogador instanceof Guerreiro) {
+                        ((Guerreiro) jogador).AttackDamage(inimigo);
+                    
+                    } else if(jogador instanceof Arqueiro){
+                        ((Arqueiro) jogador).tiroPreciso(inimigo);
+                    }
+                    
+                    else {
                         System.out.println(jogador.getNome() + " usa um ataque básico!");
                         executarTurnoAtaque(jogador, inimigo);
                     }
@@ -37,7 +44,6 @@ public class Battle {
                 case 2:
                     System.out.println("Qual item você quer usar? (Digite o nome exato)");
                     String nomeDoItem = this.input.obterTexto();
-                                   
                     jogador.usarItem(nomeDoItem);
                     break; 
 

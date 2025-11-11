@@ -3,19 +3,21 @@ package rpgEmTexto;
 public class Personagem {
     private String nome;
     private int pontosVida;
+    private int pontosVidaMaximo;
     private int ataque;
     private int defesa;
     private short nivel;
     Inventario inventario;
 
 
-    public Personagem(String nome, int pontosVida, int ataque, int defesa, short nivel, Inventario inventario){
+    public Personagem(String nome, int pontosVida, int ataque, int defesa, short nivel, Inventario inventario, int pontosVidaMaximo){
         this.nome = nome;
         this.pontosVida =  pontosVida;
         this.ataque = ataque;
         this.defesa = defesa;
         this.nivel = nivel;
         this.inventario = inventario;
+        this.pontosVidaMaximo = pontosVidaMaximo;
     }
 
     public String getNome(){
@@ -24,6 +26,10 @@ public class Personagem {
 
     public int getPontosVida(){
         return pontosVida;
+    }
+
+    public int getPontosVidaMax(){
+        return pontosVidaMaximo;
     }
 
     public int getAtaque() {
@@ -64,14 +70,21 @@ public class Personagem {
         this.nome = nome;
     }
 
-    public void setPontosVida(int pontosVida) {
+    public void setPontosVida(int novaVida) {
+        
+        if (novaVida > this.pontosVidaMaximo) {
+            
+            this.pontosVida = this.pontosVidaMaximo;
 
-        if(pontosVida <= 0){
-            System.out.println("Você morreu");
-            this.pontosVida = pontosVida;
+        } else if (novaVida < 0) {
+            
+            this.pontosVida = 0;
+            System.out.println("Você Faleceu!");
+
+        } else {
+            
+            this.pontosVida = novaVida;
         }
-
-        this.pontosVida = pontosVida;
     }
     
     public void receberItem(Item itemParaReceber) {
@@ -85,27 +98,27 @@ public class Personagem {
         this.inventario.addItem(itemParaReceber);
     }
 
-    public void efeitoItem(String itemUsado){
+    public boolean efeitoItem(String itemUsado){
         String usavel = itemUsado;
         Item itemParaUsar = this.inventario.encontrarItemPorNome(usavel);
 
         if (itemParaUsar == null) {
             System.out.println("Você tenta usar '" + usavel + "', mas não o possui!");
-            return;
+            return false;
         }
 
         boolean itemFoiConsumido = false; 
 
         switch (usavel.toLowerCase()) {
             
-            case "poção":
+            case "pocao":
                 int cura = 20; 
                 this.setPontosVida(this.getPontosVida() + cura);
                 System.out.println(this.getNome() + " usou uma Poção e curou " + cura + " PV!");
                 itemFoiConsumido = true;
                 break;
 
-            case "poção de mana":
+            case "pocao de mana":
                 if (this instanceof Mago) {
                     Mago mago = (Mago) this;
                     int manaRecuperada = 10;
@@ -164,19 +177,28 @@ public class Personagem {
             String itemParaUsarNome = itemParaUsar.getNome();
             inventario.removerItem(itemParaUsarNome);
         }
+        return itemFoiConsumido;
     }
 
-    public int tomarDano(int dano, Personagem atacante){
-        return atacante.getPontosVida() - dano;
-    }
+    public void tomarDano(int dano, Personagem atacante){
+        this.setPontosVida(this.getPontosVida() - dano);
 
-    public void usarItem(String itemUsado){
-        if(this.inventario == null){
-            System.out.println("Inventario vazio! ");
+        if(this.getPontosVida() <= 0){
+            this.inventario.soltarLootPara(atacante);
         }
-        if(this.inventario.encontrarItemPorNome(itemUsado) != null){
-            this.efeitoItem(itemUsado);
-            this.inventario.removerItem(itemUsado);
+    }
+    public void usarItem(String nomeDoItem) {     
+        if (this.inventario == null) {
+            System.out.println("Inventario vazio!");
+            return;
+        }
+        Item itemParaUsar = this.inventario.encontrarItemPorNome(nomeDoItem);
+
+        if (itemParaUsar != null) {    
+            boolean foiConsumido = this.efeitoItem(nomeDoItem);
+
+        } else {
+            System.out.println("Você tenta usar '" + nomeDoItem + "', mas não o possui!");
         }
     }
 

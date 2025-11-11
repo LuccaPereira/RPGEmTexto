@@ -1,5 +1,6 @@
 package rpgEmTexto;
-public class Item {
+import java.text.Normalizer;
+public class Item implements Cloneable {
     private String nome;
     private String descricao;
     private String efeito;

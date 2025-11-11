@@ -1,4 +1,5 @@
 package rpgEmTexto;
+import java.text.Normalizer;
 import java.util.ArrayList;
 
 public abstract class Inventario implements Cloneable{
@@ -63,34 +64,44 @@ public abstract class Inventario implements Cloneable{
             System.out.println(item); 
         }
     }
+    
+    private static String removerAcentos(String s) {
+        if (s == null) {
+            return null;
+        }
+        String normalized = Normalizer.normalize(s, Normalizer.Form.NFD);
+
+        return normalized.replaceAll("\\p{InCombiningDiacriticalMarks}", "");
+    }
 
     
-    public Item encontrarItemPorNome(String itemUsado){
-        InputHelper input = new InputHelper();
+    public Item encontrarItemPorNome(String nomeProcurado) {
+        if (this.inventario == null) {
+            System.out.println("x: Inventario Vazio!");
+            return null;
+        }
+
         boolean itemFoiEncontrado = false;
-        if(this.inventario == null){
-            System.out.println("Inventario Vazio! ");
-        }
 
-        for(Item itens : inventario){
-            Item itemInventario = itens;
-            String itemNome = itemUsado;
-            if(itemInventario.getNome().equals(itemNome)){
+        String nomeProcuradoLimpo = removerAcentos(nomeProcurado);
+
+        for (Item itemDaLista : inventario) {
+            
+            String nomeNaListaLimpo = removerAcentos(itemDaLista.getNome());
+
+            if (nomeNaListaLimpo.equalsIgnoreCase(nomeProcuradoLimpo)) {
+                
                 itemFoiEncontrado = true;
-                return itemInventario;
+                return itemDaLista; 
             }
         }
 
-        if(itemFoiEncontrado = false){
-            System.out.println("Você não possui esse item no inventario, deseja ver seu inventario? ");
-            String texto = input.obterTexto();
-            if(texto == "sim"){
-                listarInventario();
-            } else {
-                return null;
-            }
-
+        if (!itemFoiEncontrado) { 
+            System.out.println("Você não possui esse item no inventario...");
         }
-        return null;  
+        
+        return null;
     }
+
+    public abstract void soltarLootPara(Personagem atacante);
 }

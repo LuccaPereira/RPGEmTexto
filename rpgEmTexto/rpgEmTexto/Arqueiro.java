@@ -2,8 +2,8 @@ package rpgEmTexto;
 
 public class Arqueiro extends Personagem {
 
-    public Arqueiro (String nome, int pontosVida, int ataque, int defesa, short nivel, Inventario inventario){
-        super(nome, pontosVida, ataque, defesa, nivel, inventario);
+    public Arqueiro (String nome, int pontosVida, int ataque, int defesa, short nivel, Inventario inventario, int pontosVidaMaximo){
+        super(nome, pontosVida, ataque, defesa, nivel, inventario, pontosVidaMaximo);
         
     }
 
