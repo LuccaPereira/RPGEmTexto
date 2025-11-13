@@ -4,7 +4,7 @@ Este projeto é um RPG de texto clássico, focado em escolhas, combate e gerenci
 
 Pensei o "design" do código para que cada classe tenha uma responsabilidade única, permitindo que o jogo seja facilmente expandido (novas classes, novos itens, novas habilidades) sem quebrar a lógica existente.
 
-## 🚀 Funcionalidades (Features)
+## Funcionalidades (Features)
 
 * **Sistema de Batalha em Turnos:** Um loop de combate tático (`Battle.java`) que gerencia as ações do jogador e do inimigo.
 * **Escolha de Classes (Polimorfismo):** O jogador pode escolher entre `Mago`, `Guerreiro` e `Arqueiro`, cada um com habilidades e lógicas de ataque únicas (ex: `lancarBolaDeFogo`) que são chamadas durante a batalha.
@@ -19,7 +19,7 @@ Pensei o "design" do código para que cada classe tenha uma responsabilidade ún
 
 ---
 
-## 🛠️ Passo a Passo: O "Design" do Código
+## Passo a Passo: O "Design" do Código
 
 O desenvolvimento foi focado em separar as responsabilidades. Eu usei um "desenho" (design pattern) que combina Herança, Composição e Delegação para criar um código limpo.
 
@@ -71,3 +71,16 @@ Para evitar que a cura (`usarItem`) ultrapassasse a vida base, eu implementei um
 * O método `setPontosVida(int novaVida)` **impõe as regras**:
     * Ele usa `Math.max(0, novaVida)` para garantir que a vida nunca fique negativa.
     * Ele usa `Math.min(..., this.pontosVidaMaximo)` para garantir que a vida nunca ultrapasse o limite máximo.
+
+### 5. Construtores de Cópia (Deep Copy)
+
+Para atender ao requisito de criar "Save Points" ou clonar inimigos, implementei um sistema robusto de **Cópia Profunda (Deep Copy)**.
+
+O desafio aqui foi garantir que, ao copiar um Personagem, sua "mochila" (Inventário) não fosse apenas referenciada, mas totalmente recriada.
+
+* **A Cadeia de Construtores (`super`):**
+    Para copiar uma subclasse (ex: `Mago`), criei um construtor que recebe um objeto original. Ele primeiro chama `super(original)` para que a classe-pai (`Personagem`) copie os atributos básicos (Vida, Nome) e faça a clonagem do inventário.
+* **A Clonagem do Inventário:**
+    O construtor da classe `Personagem` cria uma **nova instância** de `Inventario` e itera sobre a lista original, clonando item por item (`item.clone()`). Isso impede que o uso de um item no personagem clonado afete o personagem original.
+* **Atributos Específicos:**
+    Após o retorno do `super`, o construtor do `Mago` (ou `Guerreiro`) copia apenas os atributos exclusivos daquela classe (ex: `mana` ou `furia`), garantindo uma cópia exata e independente.
