@@ -1,8 +1,13 @@
 package rpgEmTexto;
+import java.text.Normalizer;
 import java.util.ArrayList;
 
 public abstract class Inventario implements Cloneable{
    protected ArrayList<Item> inventario = new ArrayList<>();
+
+   public ArrayList<Item> getInventario(){
+        return inventario;
+    }
 
     public void addItem(Item novoItem){
         if(inventario != null){
@@ -23,12 +28,11 @@ public abstract class Inventario implements Cloneable{
         }
     }
 
-    public void removerItem(Item itemUsado){
+    public void removerItem(String itemUsado){
         boolean itemFoiEncontrado = false;
         for(Item itens : inventario){
             Item itemInventario = itens;
-            String itemNome = itemUsado.getNome();
-            if(itemNome.equals(itemInventario.getNome())){
+            if(itemUsado.equals(itemInventario.getNome())){
                 int quantidade = itemInventario.getQuantidade();
                 if(quantidade > 0){
                     System.out.println("Item Utilizado");
@@ -49,16 +53,14 @@ public abstract class Inventario implements Cloneable{
     }
 
     public void listarInventario(){
-        Item itemInventA;
-        Item itemInventB;
 
        if (this.inventario == null || this.inventario.isEmpty()) {
             System.out.println("--- Inventário Vazio ---");
             return;
         }
-
-        this.inventario.sort((itemInventA, itemInventB) -> 
-            itemInventA.getNome().compareTo(itemInventB.getNome())
+        
+        this.inventario.sort((a, b) -> 
+            a.getNome().compareTo(b.getNome())
         );
 
         System.out.println("--- Inventário (Ordenado por Nome) ---");
@@ -66,4 +68,44 @@ public abstract class Inventario implements Cloneable{
             System.out.println(item); 
         }
     }
+    
+    private static String removerAcentos(String s) {
+        if (s == null) {
+            return null;
+        }
+        String normalized = Normalizer.normalize(s, Normalizer.Form.NFD);
+
+        return normalized.replaceAll("\\p{InCombiningDiacriticalMarks}", "");
+    }
+
+    
+    public Item encontrarItemPorNome(String nomeProcurado) {
+        if (this.inventario == null) {
+            System.out.println("x: Inventario Vazio!");
+            return null;
+        }
+
+        boolean itemFoiEncontrado = false;
+
+        String nomeProcuradoLimpo = removerAcentos(nomeProcurado);
+
+        for (Item itemDaLista : inventario) {
+            
+            String nomeNaListaLimpo = removerAcentos(itemDaLista.getNome());
+
+            if (nomeNaListaLimpo.equalsIgnoreCase(nomeProcuradoLimpo)) {
+                
+                itemFoiEncontrado = true;
+                return itemDaLista; 
+            }
+        }
+
+        if (!itemFoiEncontrado) { 
+            System.out.println("Você não possui esse item no inventario...");
+        }
+        
+        return null;
+    }
+
+    public abstract void soltarLootPara(Personagem atacante);
 }

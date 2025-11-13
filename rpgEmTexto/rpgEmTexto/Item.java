@@ -1,5 +1,6 @@
 package rpgEmTexto;
-public class Item {
+import java.text.Normalizer;
+public class Item implements Cloneable {
     private String nome;
     private String descricao;
     private String efeito;
@@ -45,6 +46,7 @@ public class Item {
         this.quantidade = quantidade;
     }
 
+
     @Override
     public Item clone() {
         try {
@@ -52,5 +54,10 @@ public class Item {
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+    
+    @Override
+    public String toString() {
+        return this.getNome() + " (Qtde: " + this.getQuantidade() + ") - " + this.getDescricao();
     }
 }
