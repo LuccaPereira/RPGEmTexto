@@ -5,6 +5,10 @@ import java.util.ArrayList;
 public abstract class Inventario implements Cloneable{
    protected ArrayList<Item> inventario = new ArrayList<>();
 
+   public ArrayList<Item> getInventario(){
+        return inventario;
+    }
+
     public void addItem(Item novoItem){
         if(inventario != null){
             boolean itemFoiEncontrado = false;

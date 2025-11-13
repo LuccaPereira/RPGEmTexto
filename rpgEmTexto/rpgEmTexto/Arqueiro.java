@@ -7,6 +7,11 @@ public class Arqueiro extends Personagem {
         
     }
 
+    public Arqueiro(Arqueiro personagem){
+        super(personagem);
+        
+    }
+
     public void tiroPreciso(Personagem alvo) {
         int danoBase = 10;
 

@@ -9,6 +9,11 @@ public class Guerreiro extends Personagem {
         this.furia = furia;
     }
 
+    public Guerreiro(Guerreiro personagem){
+        super(personagem);
+        this.furia = personagem.getFuria();
+    }
+
     public void AttackDamage(Personagem alvo) {
         if(this.getFuria() > 0){
            int ataqueFurioso =  this.getAtaque() + 5;

@@ -18,6 +18,7 @@ public class Jogo {
     private Random dado;
     private Battle gerenciadorDeBatalha;
     private boolean estaRodando;
+    private Personagem newSave;
     
     private int progressoHistoria = 0;
 
@@ -92,7 +93,15 @@ public class Jogo {
                     System.out.println("Voce senta e descansa por um momento, recuperando o folego.");
                     break;
                 case 0:
-                    System.out.println("Voce saiu do jogo. Ate logo!");
+                    System.out.println("Não desligue enquanto salvamos! ");           
+                    if(this.jogador instanceof Mago){
+                        this.newSave = new Mago((Mago) this.jogador);    
+                    } else if (this.jogador instanceof Guerreiro){
+                        this.newSave = new Guerreiro((Guerreiro) this.jogador);
+                    } else {
+                        this.newSave = new Arqueiro((Arqueiro) this.jogador);
+                    }
+                    System.out.println("Seu save da classe: " + this.jogador.getClass().getSimpleName() + "foi salvo com Sucesso! Ate logo!"); 
                     this.estaRodando = false;
                     break;
             }

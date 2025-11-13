@@ -11,6 +11,12 @@ public class Mago extends Personagem {
         
     }
 
+    public Mago (Mago magoPersonagem) {
+        super(magoPersonagem);
+        this.abilityPower = magoPersonagem.getAbilityPower();
+        this.mana = magoPersonagem.getMana();
+    }
+
     public void lancarBolaDeFogo(Personagem alvo) {
         int custoMana = 5; 
         int danoBase = 10;

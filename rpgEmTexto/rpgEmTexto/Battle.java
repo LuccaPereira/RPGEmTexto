@@ -34,20 +34,19 @@ public class Battle {
                     } else if(jogador instanceof Arqueiro){
                         ((Arqueiro) jogador).tiroPreciso(inimigo);
                     }
-                    
-                    else {
-                        System.out.println(jogador.getNome() + " usa um ataque básico!");
-                        executarTurnoAtaque(jogador, inimigo);
-                    }
-                    break; 
 
+                    break; 
+                
                 case 2:
+                    System.out.println(jogador.getNome() + " usa um ataque básico!");
+                    executarTurnoAtaque(jogador, inimigo);
+                case 3:
                     System.out.println("Qual item você quer usar? (Digite o nome exato)");
                     String nomeDoItem = this.input.obterTexto();
                     jogador.usarItem(nomeDoItem);
                     break; 
 
-                case 3:
+                case 4:
                     jogadorFugiu = tentarFugir(jogador);
                     break;
             }
@@ -107,9 +106,10 @@ public class Battle {
         System.out.println("\n--- Turno do Jogador ---");
         System.out.println("Jogador PV: " + p1.getPontosVida());
         System.out.println("Inimigo PV: " + p2.getPontosVida());
-        System.out.println("1. Atacar");
-        System.out.println("2. Usar Item");
-        System.out.println("3. Tentar Fugir");
+        System.out.println("1. Atque Especial");
+        System.out.println("2. Ataque Basico");
+        System.out.println("3. Usar Item");
+        System.out.println("4. Tentar Fugir");
     }
 
     private int calcularAtaqueEfetivo(Personagem atacante, int rolagem) {

@@ -1,5 +1,7 @@
 package rpgEmTexto;
 
+import java.util.ArrayList;
+
 public class Personagem {
     private String nome;
     private int pontosVida;
@@ -18,6 +20,21 @@ public class Personagem {
         this.nivel = nivel;
         this.inventario = inventario;
         this.pontosVidaMaximo = pontosVidaMaximo;
+    }
+
+    public Personagem(Personagem personagem){
+        this.ataque = personagem.getAtaque();
+        this.defesa = personagem.getDefesa();
+        this.pontosVida = personagem.getPontosVida();
+        this.nome = personagem.getNome();
+        this.nivel = personagem.getNivel();
+        Inventario inventario = new InventarioPersonagem();
+        ArrayList<Item> meusItens = personagem.inventario.getInventario();
+
+        for(Item itens : meusItens){
+            Item clonagem = itens.clone();
+            this.inventario.addItem(clonagem);
+        }
     }
 
     public String getNome(){
@@ -71,18 +88,11 @@ public class Personagem {
     }
 
     public void setPontosVida(int novaVida) {
-        
         if (novaVida > this.pontosVidaMaximo) {
-            
             this.pontosVida = this.pontosVidaMaximo;
-
         } else if (novaVida < 0) {
-            
             this.pontosVida = 0;
-            System.out.println("Você Faleceu!");
-
         } else {
-            
             this.pontosVida = novaVida;
         }
     }
@@ -180,12 +190,24 @@ public class Personagem {
         return itemFoiConsumido;
     }
 
-    public void tomarDano(int dano, Personagem atacante){
+public void tomarDano(int dano, Personagem atacante) {
         this.setPontosVida(this.getPontosVida() - dano);
 
-        if(this.getPontosVida() <= 0){
-            this.inventario.soltarLootPara(atacante);
+        if (this.getPontosVida() <= 0) {
+            if (this instanceof Inimigo) {
+                System.out.println("Você derrotou o " + this.getNome() + "!");
+                if (this.inventario != null) {
+                    this.inventario.soltarLootPara(atacante);
+                }
+                if (atacante != null) {
+                    System.out.println(atacante.getNome() + " ganhou experiência!");
+                    atacante.setNivel((short) (atacante.getNivel() + 1));
+                }
+            } else {
+                System.out.println("... Game Over ...");
+            }
         }
+
     }
     public void usarItem(String nomeDoItem) {     
         if (this.inventario == null) {
